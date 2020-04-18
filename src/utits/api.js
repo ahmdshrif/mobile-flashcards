@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 
-STORAGE_KEY = "s"
+STORAGE_KEY = "flachcard:data"
 
 export const saveDeckTitle = (title) => {
     return AsyncStorage.mergeItem(STORAGE_KEY, JSON.stringify({
@@ -25,19 +25,3 @@ export const addCardToDeck = async (key, card) => {
     data[key].push(card);
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 };
-
-export function submitEntry({ entry, key }) {
-    return AsyncStorage.mergeItem(STORAGE_KEY, JSON.stringify({
-        [key]: entry
-    }))
-}
-
-export function removeEntry(key) {
-    return AsyncStorage.getItem(STORAGE_KEY)
-        .then((results) => {
-            const data = JSON.parse(results)
-            data[key] = undefined
-            delete data[key]
-            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-        })
-}

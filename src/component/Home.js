@@ -1,16 +1,20 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, FlatList } from "react-native";
 // import { deks } from "../utits/_DATA";
-import { saveDeckTitle, getDecks } from "../utits/api"
+import { saveDeckTitle, getDecks } from "../utits/api";
+import { setLocalNotification, clearLocalNotification } from "../utits/helper";
 
 class Home extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            decks: {}
+            decks: undefined
         }
     }
+
     async componentDidMount() {
+        // clearLocalNotification()
+        setLocalNotification()
         let decks = await getDecks()
         this.setState({ decks })
     }
@@ -27,7 +31,7 @@ class Home extends React.Component {
     Item = ({ I_key, decks }) => (
         <TouchableOpacity
             onPress={() => this.openDeck(decks[I_key], I_key)}
-            style={{ marginTop: 10, marginHorizontal: "auto", padding: 40, borderWidth: 1, width: "95%" }}>
+            style={{ backgroundColor: "white", marginTop: 10, marginHorizontal: "auto", padding: 40, borderWidth: 1, width: "95%" }}>
             <Text style={Styles.TitelText}>{I_key} </Text>
             <Text style={Styles.SubTitleText}>{typeof decks[I_key] === undefined ? " " : decks[I_key].length + " card"}</Text>
         </TouchableOpacity>
@@ -36,28 +40,34 @@ class Home extends React.Component {
 
     render() {
         const { decks } = this.state
-        if (typeof decks == undefined) {
-
+        if (typeof decks === undefined || decks == undefined) {
             return (
-                <View />
+                <View style={Styles.container}>
+                    <Text style={{ fontSize: 20 }}> no decks </Text>
+                </View>
             )
+        } else {
+            const keys = Object.keys(decks)
+            return (
+
+                <FlatList
+                    contentContainerStyle={Styles.container}
+                    data={keys}
+                    renderItem={({ item }) => <this.Item I_key={item} decks={decks}
+                        key={({ item }) => item }
+                    />} />
+            );
         }
-        const keys = Object.keys(decks)
-        return (
-            <FlatList
-                data={keys}
-                renderItem={({ item }) => <this.Item I_key={item} decks={decks} />} />
-        );
     }
 }
 
 
 const Styles = StyleSheet.create({
     container: {
-        width: "100%",
         flex: 1,
+        width: "100%",
         marginTop: 20,
-        alignItems: "center"
+        marginLeft: "2.5%"
     },
     TitelText: {
         color: "black",

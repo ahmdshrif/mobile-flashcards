@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, DatePickerIOS } from "react-native";
-import { deks } from "../utits/_DATA";
-
+import {setLocalNotification} from '../utits/helper'
 class Home extends React.Component {
     constructor(props) {
         super(props)
@@ -27,16 +26,26 @@ class Home extends React.Component {
             )
         }
         if (this.state.Q_id >= deck.length) {
+            //add notification async
+            setLocalNotification()
+
             return (
                 <View style={{ ...Styles.container, justifyContent: "center" }}>
                     <Text style={Styles.TitelText}> retsult : {this.state.Correct} of {deck.length}</Text>
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.navigation.navigate("home")
+                            this.props.navigation.goBack()
                         }}
                         style={{ ...Styles.Button, backgroundColor: "red", marginTop: 40 }} >
-                        <Text style={{ color: "white" }}>Back To Home</Text>
+                        <Text style={{ color: "white" }}>Back to Deck</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.setState({Correct:0 , incorrect:0 , Q_id:0})                        }}
+                        style={{ ...Styles.Button, backgroundColor: "red", marginTop: 40, }} >
+                        <Text style={{ color: "white" }}>Restart Quiz</Text>
+                    </TouchableOpacity>
+
                 </View>
             )
         }
