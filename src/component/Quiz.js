@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, DatePickerIOS } from "react-native";
-import {setLocalNotification} from '../utits/helper'
+import { setLocalNotification, clearLocalNotification } from '../utits/helper'
 class Home extends React.Component {
     constructor(props) {
         super(props)
@@ -27,6 +27,7 @@ class Home extends React.Component {
         }
         if (this.state.Q_id >= deck.length) {
             //add notification async
+            clearLocalNotification()
             setLocalNotification()
 
             return (
@@ -41,7 +42,8 @@ class Home extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            this.setState({Correct:0 , incorrect:0 , Q_id:0})                        }}
+                            this.setState({ Correct: 0, incorrect: 0, Q_id: 0 })
+                        }}
                         style={{ ...Styles.Button, backgroundColor: "red", marginTop: 40, }} >
                         <Text style={{ color: "white" }}>Restart Quiz</Text>
                     </TouchableOpacity>
